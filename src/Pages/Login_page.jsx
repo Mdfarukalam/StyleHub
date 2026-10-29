@@ -19,7 +19,7 @@ function Login() {
         isOpen={isOpen}
         onRequestClose={() => setIsOpen(false)}
         className="bg-white w-[400px] p-8 rounded-xl outline-none"
-        overlayClassName="fixed inset-0 bg-black/50 flex items-center justify-center"
+        overlayClassName="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]"
       >
         <button
           onClick={() => setIsOpen(false)}
