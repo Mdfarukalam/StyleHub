@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
-
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 Modal.setAppElement("#root");
 
 const API_URL =
@@ -13,6 +14,7 @@ function Signup() {
     fullName: "",
     Email: "",
     Password: "",
+    phoneNumber:""
   });
 
   const [loading, setLoading] = useState(false);
@@ -34,13 +36,18 @@ function Signup() {
     setMessage("");
     setMessageType("");
 
-    const { fullName, Email, Password } = formData;
+    const { fullName, Email, Password,phoneNumber } = formData;
 
-    if (!fullName.trim() || !Email.trim() || !Password) {
+    if (!fullName.trim() || !Email.trim() || !Password || !phoneNumber) {
       setMessage("Please fill all fields.");
       setMessageType("error");
       return;
     }
+    if (!phoneNumber || !/^\+91[6-9]\d{9}$/.test(phoneNumber)) {
+  setMessage("Please enter a valid 10-digit Indian mobile number.");
+  setMessageType("error");
+  return;
+}
 
     if (Password.length < 6) {
       setMessage("Password must be at least 6 characters.");
@@ -59,6 +66,7 @@ function Signup() {
         body: JSON.stringify({
           fullName: fullName.trim(),
           Email: Email.trim(),
+          phoneNumber,
           Password,
         }),
       });
@@ -76,6 +84,7 @@ function Signup() {
         fullName: "",
         Email: "",
         Password: "",
+        phoneNumber:""
       });
 
       setIsOpen(false);
@@ -143,7 +152,7 @@ function Signup() {
           <input
             type="text"
             name="fullName"
-            placeholder="Full fullName"
+            placeholder="Full Name"
             autoComplete="name"
             value={formData.fullName}
             onChange={handleChange}
@@ -151,6 +160,8 @@ function Signup() {
             className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus:border-pink-500"
           />
 
+
+          
           <input
             type="email"
             name="Email"
@@ -161,6 +172,26 @@ function Signup() {
             disabled={loading}
             className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus:border-pink-500"
           />
+          <PhoneInput
+  defaultCountry="IN"
+  countries={["IN"]}
+  international
+  countryCallingCodeEditable={false}
+  placeholder="10 Digit Phone Number"
+  value={formData.phoneNumber}
+  onChange={(value) =>
+    setFormData((prev) => ({
+      ...prev,
+      phoneNumber: value || "",
+    }))
+  }
+  disabled={loading}
+  className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus-within:border-pink-500"
+  numberInputProps={{
+    className:
+      "w-full outline-none border-none focus:outline-none focus:ring-0 bg-transparent",
+  }}
+/>
 
           <input
             type="password"
