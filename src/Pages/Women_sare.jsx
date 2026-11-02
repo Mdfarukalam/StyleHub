@@ -1,606 +1,176 @@
-import React from 'react'
-import Navbar from '../component/navbar'
+import React, { useState, useEffect } from "react";
+import Navbar from "../component/navbar";
 import Footer from '../component/Footer'
+import useGet from "../service/hooks/useGet";
+import API from "../ApiEndPoint/ApiUrl";
 const Women_sare = () => {
     
-  return (
-<>
-      <Navbar />
+    const [WomenProducts, setWomenProducts] = useState([]);
+
+    const {
+        data,
+        isLoading,
+        isError,
+    } = useGet(
+        ["Women"],
+        API.UserWomenlists
+    );
+
+
+
+
+    useEffect(() => {
+        if (data) {
+            const userData = Array.isArray(data)
+                ? data
+                : data.UserwomenProducts || [];
+
+            setWomenProducts(
+                Array.isArray(userData) ? userData : []
+            );
+        }
+    }, [data]);
+ 
+    return (
+        <>
+            <Navbar />
+
+            {/* Navbar ke liye top space */}
             <div className="pt-24"></div>
-         <div className="container mx-auto px-4">
 
-          {/* Heading */}
-          <div className="mb-8">
-            <p className="text-red-500 font-medium">
-              — FEATURED PRODUCTS
-            </p>
+            <div className="container mx-auto px-4">
 
-            <h1 className="text-4xl font-bold mt-2">
-              Latest Collection
-            </h1>
+                {/* Heading */}
+                <div className="mb-8">
+                    <p className="text-red-500 font-medium">
+                        — FEATURED PRODUCTS
+                    </p>
 
-            <p className="text-gray-500 mt-2">
-              Discover the best styles, handpicked for you.
-            </p>
-          </div>
+                    <h1 className="text-4xl font-bold mt-2">
+                        Latest Collection
+                    </h1>
+
+                    <p className="text-gray-500 mt-2">
+                        Discover the best styles, handpicked for you.
+                    </p>
+                </div>
 
 
-          {/* Products */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6">
-            
-      <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-              <div className="relative">
+                    {WomenProducts.map((product) => (
 
-                <img
-                  src="https://rukminim1.flixcart.com/image/1600/2140/xif0q/sari/u/q/v/free-0009-darshansaree-unstitched-resized-original-imahm6c3w7eyvucu.jpeg?q=60"
-                  className="w-full h-[400px] object-cover"
-                />
+                        <div
+                            key={product._id}
+                            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
+                        >
 
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
+                            {/* Product Image */}
+                            {/* Product Image */}
+                            <div className="w-full h-64 overflow-hidden relative group">
 
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
+                                <img
+                                    src={product.images}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                />
 
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
+                                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
+
+                                    <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
+                                        -25%
+                                    </span>
+
+                                    <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
+                                        ♡
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            {/* Product Information */}
+                            <div className="p-4">
+
+                                <h2 className="font-bold text-xl">
+                                    {product.name}
+                                </h2>
+
+                                <p className="text-gray-500 mt-1">
+                                    {product.brand}
+                                </p>
+
+                                {/* Price */}
+                                <div className="flex items-center gap-3 mt-5 flex-wrap">
+
+                                    <span className="text-2xl font-bold">
+                                        ₹{product.price}
+                                    </span>
+
+                                    <span className="text-gray-400 line-through">
+                                        ₹{product.originalPrice}
+                                    </span>
+
+                                    <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
+                                        {product.discount}% OFF
+                                    </span>
+
+                                </div>
+
+                                {/* Rating */}
+                                <div className="mt-4">
+                                    ⭐ {product.rating}
+                                </div>
+
+                                {/* Colors */}
+                                <div className="flex gap-3 mt-4">
+                                    {product.colors?.map((color, index) => (
+                                        <span
+                                            key={index}
+                                            title={color}
+                                            className="w-6 h-6 rounded-full border border-gray-300"
+                                            style={{ backgroundColor: color }}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Sizes */}
+                                <div className="flex gap-2 mt-4">
+                                    {product.sizes?.map((size, index) => (
+                                        <span
+                                            key={index}
+                                            className="border px-3 py-1 rounded text-sm"
+                                        >
+                                            {size}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                {/* Button */}
+                                <button
+                                    className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6"
+                                >
+                                    🛒 Add to Cart
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    ))}
 
                 </div>
 
-              </div>
 
-              <div className="p-4">
 
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
 
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
 
             </div>
-  <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
+            <Footer />
 
-              <div className="relative">
+        </>
+    );
+};
 
-                <img
-                  src="https://rukminim1.flixcart.com/image/1600/2140/xif0q/sari/u/q/v/free-0009-darshansaree-unstitched-resized-original-imahm6c3w7eyvucu.jpeg?q=60"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-              <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/1600/2140/xif0q/sari/u/q/v/free-0009-darshansaree-unstitched-resized-original-imahm6c3w7eyvucu.jpeg?q=60"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-              <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/1600/2140/xif0q/sari/u/q/v/free-0009-darshansaree-unstitched-resized-original-imahm6c3w7eyvucu.jpeg?q=60"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-
-
-
-
-
-
-              <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/3584/3584/xif0q/sari/t/8/a/free-sarees-for-women-party-wear-sarees-sarees-saree-cotton-silk-original-imahzy25hrfxhvjx.jpeg?q=90"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-
-                 <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/3584/3584/xif0q/sari/t/8/a/free-sarees-for-women-party-wear-sarees-sarees-saree-cotton-silk-original-imahzy25hrfxhvjx.jpeg?q=90"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-                 <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/3584/3584/xif0q/sari/t/8/a/free-sarees-for-women-party-wear-sarees-sarees-saree-cotton-silk-original-imahzy25hrfxhvjx.jpeg?q=90"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-                 <div className="lg:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-
-              <div className="relative">
-
-                <img
-                  src="https://rukminim1.flixcart.com/image/3584/3584/xif0q/sari/t/8/a/free-sarees-for-women-party-wear-sarees-sarees-saree-cotton-silk-original-imahzy25hrfxhvjx.jpeg?q=90"
-                  className="w-full h-[400px] object-cover"
-                />
-
-                <div className="absolute top-0 left-0 w-full flex justify-between p-4">
-
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-md font-bold">
-                    -30%
-                  </span>
-
-                  <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl">
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="p-4">
-
-                <h2 className="font-bold text-xl">
-                  Women's T-Shirt
-                </h2>
-
-                <p className="text-gray-500">
-                  Campus Sutra
-                </p>
-
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-                    ₹699
-                  </span>
-
-                  <span className="text-gray-400 line-through">
-                    ₹999
-                  </span>
-
-                  <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm">
-                    30% OFF
-                  </span>
-
-                </div>
-
-                <div className="mt-4">
-                  ⭐ 4.5 (98)
-                </div>
-
-                <div className="flex gap-3 mt-4">
-
-                  <span className="w-6 h-6 rounded-full bg-purple-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-pink-300"></span>
-
-                  <span className="w-6 h-6 rounded-full bg-black"></span>
-
-                </div>
-
-                <button className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-lg mt-6">
-                  🛒 Add to Cart
-                </button>
-
-              </div>
-
-            </div>
-
-            </div>
-            </div>
-                   <Footer/>
-</>
-  )
-}
 
 export default Women_sare

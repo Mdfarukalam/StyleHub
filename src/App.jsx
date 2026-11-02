@@ -4,7 +4,9 @@ import Men_cloths from './Pages/Men_cloths';
 import Home from './Pages/Home';
 import Women_sare from "./Pages/Women_sare";
 import Kids_cloths from "./Pages/Kids_cloths";
-
+import GlobalLoader from "./component/GlobalLoader";
+ import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
 
         return (
@@ -18,6 +20,12 @@ function App() {
                                 <Route path='/women' element={<Women_sare />}>home</Route>
                                 <Route path='/kids' element={<Kids_cloths />}>home</Route>
                         </Routes>
+                         <GlobalLoader />
+                            <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        theme="dark"
+      />
                 </BrowserRouter>
 
 

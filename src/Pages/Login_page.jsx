@@ -1,94 +1,68 @@
 import { useState } from "react";
 import Modal from "react-modal";
-
+import useMutationApi from "../service/hooks/useMutationApi";
+import storageService from "../service/storageService";
+import { toast } from "react-toastify";
+import API from "../ApiEndPoint/ApiUrl";
+import { useNavigate } from "react-router-dom";
+import toastService from "../component/toastService";
 Modal.setAppElement("#root");
 
-const API_URL =
-  "https://stylehub-backend-3-pgrs.onrender.com/api/auth/Login";
+ 
 
 function Login() {
   const [isOpen, setIsOpen] = useState(false);
 
+   const LoginMutation = useMutationApi("POST", API.Login);
+
+  const [showPassword, setShowPassword] = useState(false);
+  
   const [formData, setFormData] = useState({
     Email: "",
     Password: "",
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
+ 
+  // Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
+ 
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+ const handleLogin = (e) => {
+  e.preventDefault();
 
-    setMessage("");
+  setError("");
 
-    if (!formData.Email.trim() || !formData.Password) {
-      setMessage("Please enter email and password.");
-      setIsSuccess(false);
-      return;
-    }
+  LoginMutation.mutate(formData, {
+    onSuccess: (data) => {
+      console.log(data,"datadatadata")
+      storageService.setToken(data.token);
+ 
+      toastService.success("Login Successfully!");
+     setIsOpen(false);
+    },
 
-    try {
-      setLoading(true);
+    onError: (error) => {
+      setError(error.message);
+      toastService.error(error.message || "Login Failed!");
+    },
+  });
+};
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Email: formData.Email.trim(),
-          Password: formData.Password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed.");
-      }
-
-      if (!data.token) {
-        throw new Error("Login successful, but token was not received.");
-      }
-
-      // Save JWT token
-      localStorage.setItem("token", data.token);
-
-      setIsSuccess(true);
-      setMessage(data.message || "Login successful!");
-
-      setFormData({
-        Email: "",
-        Password: "",
-      });
-
-      setIsOpen(false);
-
-      // Notify other components in this tab
-      window.dispatchEvent(new Event("authChanged"));
-    } catch (error) {
-      setIsSuccess(false);
-      setMessage(
-        error.message || "Unable to login. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const openModal = () => {
-    setMessage("");
+   
     setIsOpen(true);
   };
 
@@ -101,16 +75,7 @@ function Login() {
         Login
       </button>
 
-      {message && !isOpen && (
-        <p
-          role="status"
-          className={`mt-3 text-sm ${
-            isSuccess ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          {message}
-        </p>
-      )}
+ 
 
       <Modal
         isOpen={isOpen}
@@ -133,15 +98,7 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">
           Login
         </h2>
-
-        {message && (
-          <p
-            role="alert"
-            className="text-red-600 text-sm mb-4"
-          >
-            {message}
-          </p>
-        )}
+ 
 
         <form onSubmit={handleLogin}>
           <input

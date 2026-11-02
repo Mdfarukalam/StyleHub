@@ -1,26 +1,31 @@
+
 import { useState } from "react";
 import Modal from "react-modal";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-Modal.setAppElement("#root");
 
-const API_URL =
-  "https://stylehub-backend-3-pgrs.onrender.com/api/auth/signup";
+import useMutationApi from "../service/hooks/useMutationApi";
+import storageService from "../service/storageService";
+import API from "../ApiEndPoint/ApiUrl";
+import toastService from "../component/toastService";
+
+Modal.setAppElement("#root");
 
 function Signup() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const SignupMutation = useMutationApi("POST", API.signup);
 
   const [formData, setFormData] = useState({
     fullName: "",
     Email: "",
     Password: "",
-    phoneNumber:""
+    phoneNumber: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-
+  // Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -30,77 +35,44 @@ function Signup() {
     }));
   };
 
-  const handleSignup = async (e) => {
+  // Signup API
+  const handleSignup = (e) => {
     e.preventDefault();
 
-    setMessage("");
-    setMessageType("");
+    setError("");
+    setLoading(true);
 
-    const { fullName, Email, Password,phoneNumber } = formData;
+    SignupMutation.mutate(formData, {
+      onSuccess: (data) => {
+        console.log(data, "Signup Data");
 
-    if (!fullName.trim() || !Email.trim() || !Password || !phoneNumber) {
-      setMessage("Please fill all fields.");
-      setMessageType("error");
-      return;
-    }
-    if (!phoneNumber || !/^\+91[6-9]\d{9}$/.test(phoneNumber)) {
-  setMessage("Please enter a valid 10-digit Indian mobile number.");
-  setMessageType("error");
-  return;
-}
+        if (data.token) {
+          storageService.setToken(data.token);
+        }
 
-    if (Password.length < 6) {
-      setMessage("Password must be at least 6 characters.");
-      setMessageType("error");
-      return;
-    }
+        toastService.success("Signup Successfully!");
 
-    try {
-      setLoading(true);
+        setIsOpen(false);
+        setLoading(false);
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: fullName.trim(),
-          Email: Email.trim(),
-          phoneNumber,
-          Password,
-        }),
-      });
+        setFormData({
+          fullName: "",
+          Email: "",
+          Password: "",
+          phoneNumber: "",
+        });
+      },
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed.");
-      }
-
-      setMessage(data.message || "Account created successfully!");
-      setMessageType("success");
-
-      setFormData({
-        fullName: "",
-        Email: "",
-        Password: "",
-        phoneNumber:""
-      });
-
-      setIsOpen(false);
-    } catch (error) {
-      setMessage(
-        error.message || "Unable to register. Please try again."
-      );
-      setMessageType("error");
-    } finally {
-      setLoading(false);
-    }
+      onError: (error) => {
+        setError(error.message);
+        toastService.error(error.message || "Signup Failed!");
+        setLoading(false);
+      },
+    });
   };
 
   const openModal = () => {
-    setMessage("");
-    setMessageType("");
+    setError("");
     setIsOpen(true);
   };
 
@@ -113,22 +85,9 @@ function Signup() {
         Signup
       </button>
 
-      {message && (
-        <p
-          role="status"
-          className={`mt-3 text-sm ${
-            messageType === "success"
-              ? "text-green-600"
-              : "text-red-600"
-          }`}
-        >
-          {message}
-        </p>
-      )}
-
       <Modal
         isOpen={isOpen}
-        onRequestClose={() => setIsOpen(false)}
+        onRequestClose={() => !loading && setIsOpen(false)}
         shouldCloseOnOverlayClick={!loading}
         shouldCloseOnEsc={!loading}
         className="bg-white w-[calc(100%-32px)] max-w-[400px] p-8 rounded-xl outline-none"
@@ -157,11 +116,10 @@ function Signup() {
             value={formData.fullName}
             onChange={handleChange}
             disabled={loading}
+            required
             className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus:border-pink-500"
           />
 
-
-          
           <input
             type="email"
             name="Email"
@@ -170,28 +128,36 @@ function Signup() {
             value={formData.Email}
             onChange={handleChange}
             disabled={loading}
+            required
             className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus:border-pink-500"
           />
+
           <PhoneInput
-  defaultCountry="IN"
-  countries={["IN"]}
-  international
-  countryCallingCodeEditable={false}
-  placeholder="10 Digit Phone Number"
-  value={formData.phoneNumber}
-  onChange={(value) =>
-    setFormData((prev) => ({
-      ...prev,
-      phoneNumber: value || "",
-    }))
-  }
-  disabled={loading}
-  className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus-within:border-pink-500"
-  numberInputProps={{
-    className:
-      "w-full outline-none border-none focus:outline-none focus:ring-0 bg-transparent",
-  }}
-/>
+            defaultCountry="IN"
+            countries={["IN"]}
+            international
+            countryCallingCodeEditable={false}
+            limitMaxLength
+            placeholder="10 Digit Phone Number"
+            value={formData.phoneNumber}
+            onChange={(value) => {
+              const digits = (value || "").replace(/\D/g, "");
+
+              // +91 country code ke baad maximum 10 digits
+              if (digits.length <= 12) {
+                setFormData((prev) => ({
+                  ...prev,
+                  phoneNumber: value || "",
+                }));
+              }
+            }}
+            disabled={loading}
+            className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus-within:border-pink-500"
+            numberInputProps={{
+              className:
+                "w-full outline-none border-none focus:outline-none focus:ring-0 bg-transparent",
+            }}
+          />
 
           <input
             type="password"
@@ -201,15 +167,21 @@ function Signup() {
             value={formData.Password}
             onChange={handleChange}
             disabled={loading}
+            minLength={6}
+            required
             className="w-full border border-gray-300 p-3 rounded-lg mb-4 outline-none focus:border-pink-500"
           />
+
+          {error && (
+            <p className="text-red-500 text-sm mb-3">{error}</p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-pink-500 text-white p-3 rounded-lg font-semibold hover:bg-pink-600 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? "Creating Account..." : "Sign Up"}
+            {loading ? "Creating Account..." : "Signup"}
           </button>
         </form>
       </Modal>
