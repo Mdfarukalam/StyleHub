@@ -1,12 +1,27 @@
 
 import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+ 
 import Login from "../Pages/Login_page";
 import Signup from "../Pages/Signup";
 import User_Profile from "../Pages/User_Profile";
 
+import {useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+
+  const [search, setSearch] = useState("");
+const navigate = useNavigate();
+
+const handleSearch = (e) => {
+  e.preventDefault();
+
+  if (!search.trim()) return;
+
+  navigate(`/men?search=${encodeURIComponent(search.trim())}`);
+};
 
   const navItems = [
     { name: "HOME", path: "/Home" },
@@ -52,14 +67,24 @@ const Navbar = () => {
         <div className="ml-auto flex items-center gap-3 md:gap-6">
 
           {/* Search */}
-          <div className="hidden md:flex items-center w-[300px] h-[45px] border border-gray-300 rounded-lg px-4">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="flex-1 outline-none text-gray-700"
-            />
-            <span>🔍</span>
-          </div>
+          {/* Search */}
+<form
+  onSubmit={handleSearch}
+  className="hidden md:flex items-center w-[300px] h-[45px] border border-gray-300 rounded-lg px-4"
+>
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder="Search products..."
+    className="flex-1 outline-none text-gray-700"
+  />
+
+  <button type="submit" className="text-xl">
+    🔍
+  </button>
+</form>
+          
 
           {/* Login */}
           <div className="hidden sm:block">

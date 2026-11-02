@@ -3,19 +3,26 @@ import Navbar from "../component/navbar";
 import Footer from '../component/Footer'
 import useGet from "../service/hooks/useGet";
 import API from "../ApiEndPoint/ApiUrl";
+import { useSearchParams } from "react-router-dom";
+
+
 const Men_cloths = () => {
+        const [menProducts, setMenProducts] = useState([]);
+const [searchParams] = useSearchParams();
 
-    const [menProducts, setMenProducts] = useState([]);
+const search = searchParams.get("search") || "";
+ 
+ 
+ const {
+  data,
+  isLoading,
+  isError,
+} = useGet(
+  ["men", search],
+  `${API.UserListMenProducts}?search=${encodeURIComponent(search)}`
+);
 
-    const {
-        data,
-        isLoading,
-        isError,
-    } = useGet(
-        ["men"],
-        API.UserListMenProducts
-    );
-
+  
 
 
 
