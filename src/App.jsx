@@ -7,6 +7,8 @@ import Kids_cloths from "./Pages/Kids_cloths";
 import GlobalLoader from "./component/GlobalLoader";
  import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cart from "./Pages/Cart";
+import Wishlist from "./Pages/Wishlist";
 function App() {
 
         return (
@@ -19,6 +21,8 @@ function App() {
                                 <Route path='/men' element={<Men_cloths />}>home</Route>
                                 <Route path='/women' element={<Women_sare />}>home</Route>
                                 <Route path='/kids' element={<Kids_cloths />}>home</Route>
+                                  <Route path="/cart" element={<Cart />} />
+ <Route path="/Wishlist" element={<Wishlist />} />
                         </Routes>
                          <GlobalLoader />
                             <ToastContainer

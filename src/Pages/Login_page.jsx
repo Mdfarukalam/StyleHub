@@ -6,17 +6,18 @@ import { toast } from "react-toastify";
 import API from "../ApiEndPoint/ApiUrl";
 import { useNavigate } from "react-router-dom";
 import toastService from "../component/toastService";
+import Signup from "./Signup";
 Modal.setAppElement("#root");
 
- 
+
 
 function Login() {
   const [isOpen, setIsOpen] = useState(false);
 
-   const LoginMutation = useMutationApi("POST", API.Login);
+  const LoginMutation = useMutationApi("POST", API.Login);
 
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     Email: "",
     Password: "",
@@ -27,7 +28,7 @@ function Login() {
 
   const navigate = useNavigate();
 
- 
+
   // Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,32 +38,32 @@ function Login() {
       [name]: value,
     });
   };
- 
 
- const handleLogin = (e) => {
-  e.preventDefault();
 
-  setError("");
+  const handleLogin = (e) => {
+    e.preventDefault();
 
-  LoginMutation.mutate(formData, {
-    onSuccess: (data) => {
-      console.log(data,"datadatadata")
-      storageService.setToken(data.token);
- 
-      toastService.success("Login Successfully!");
-     setIsOpen(false);
-    },
+    setError("");
 
-    onError: (error) => {
-      setError(error.message);
-      toastService.error(error.message || "Login Failed!");
-    },
-  });
-};
+    LoginMutation.mutate(formData, {
+      onSuccess: (data) => {
+        console.log(data, "datadatadata")
+        storageService.setToken(data.token);
+  window.dispatchEvent(new Event("auth-change"));
+        toastService.success("Login Successfully!");
+        setIsOpen(false);
+      },
+
+      onError: (error) => {
+        setError(error.message);
+        toastService.error(error.message || "Login Failed!");
+      },
+    });
+  };
 
 
   const openModal = () => {
-   
+
     setIsOpen(true);
   };
 
@@ -75,7 +76,7 @@ function Login() {
         Login
       </button>
 
- 
+
 
       <Modal
         isOpen={isOpen}
@@ -98,7 +99,7 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">
           Login
         </h2>
- 
+
 
         <form onSubmit={handleLogin}>
           <input
@@ -130,7 +131,20 @@ function Login() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
+
+
         </form>
+
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Don't have an account?{" "}
+          <button
+            type="button"
+            className="text-pink-500 font-semibold hover:underline"
+          >
+            <Signup />
+          </button>
+        </p>
+
       </Modal>
     </>
   );

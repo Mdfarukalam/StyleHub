@@ -51,7 +51,7 @@ function Signup() {
         }
 
         toastService.success("Signup Successfully!");
-
+  window.dispatchEvent(new Event("auth-change"));
         setIsOpen(false);
         setLoading(false);
 
@@ -78,12 +78,12 @@ function Signup() {
 
   return (
     <>
-      <button
+      <p
         onClick={openModal}
-        className="bg-pink-500 text-white px-5 py-2 rounded-lg hover:bg-pink-600 transition"
+    
       >
         Signup
-      </button>
+      </p>
 
       <Modal
         isOpen={isOpen}

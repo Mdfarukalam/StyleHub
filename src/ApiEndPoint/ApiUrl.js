@@ -5,7 +5,11 @@ export const API = {
   Userkidlists:'/api/auth/Userkidlists',
   UserGetTopProducts:'/api/auth/UserGetTopProducts',
   UserListArrivalsProducts:'/api/auth/UserListArrivalsProducts',
-  signup:'/api/auth/signup'
+  signup:'/api/auth/signup',
+  Profile:'/api/auth/Profile',
+addcart: "/api/auth/AddCarts",
+UserCartProducts:"/api/auth/UserCartProducts",
+DeleteCartProduct:"/api/auth/DeleteCartProducts",
  
 
 
