@@ -63,7 +63,33 @@ import toastService from "./toastService";
       },
     }
   );
+
 };
+const { mutate: addWishlist, isPending: isWishlistPending } = useMutationApi(
+  "POST",
+  API.AddWishlist,
+  ["wishlist"]
+);
+
+const handleWishlist = () => {
+  addWishlist(
+    {
+      productId: product._id,
+      productType: "men",
+    },
+    {
+      onSuccess: () => {
+        toastService.success("Added to wishlist successfully");
+      },
+      onError: (error) => {
+        toastService.error(
+          error?.response?.data?.message || "Failed to add wishlist"
+        );
+      },
+    }
+  );
+};
+
   console.log(selectedVariant,"selectedVariant")
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition">
@@ -90,9 +116,9 @@ import toastService from "./toastService";
             -{selectedVariant?.discount || 0}%
           </span>
 
-          <span className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl cursor-pointer">
+          <span onClick={handleWishlist} className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl cursor-pointer">
             ♡
-          </span>
+          </span  >
 
         </div>
       </div>

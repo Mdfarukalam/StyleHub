@@ -10,6 +10,9 @@ export const API = {
 addcart: "/api/auth/AddCarts",
 UserCartProducts:"/api/auth/UserCartProducts",
 DeleteCartProduct:"/api/auth/DeleteCartProducts",
+AddWishlist:"/api/auth/AddWishlist",
+RemoveWishlist:"/api/auth/RemoveWishlist",
+GetWishlist:"/api/auth/GetWishlist",
  
 
 
