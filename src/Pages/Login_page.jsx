@@ -7,6 +7,8 @@ import API from "../ApiEndPoint/ApiUrl";
 import { useNavigate } from "react-router-dom";
 import toastService from "../component/toastService";
 import Signup from "./Signup";
+import { useAuth } from "../service/hooks/AuthContext";
+
 Modal.setAppElement("#root");
 
 
@@ -15,7 +17,7 @@ function Login() {
   const [isOpen, setIsOpen] = useState(false);
 
   const LoginMutation = useMutationApi("POST", API.Login);
-
+const { isLoggedIn, login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -40,28 +42,60 @@ function Login() {
   };
 
 
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+
+  //   setError("");
+
+  //   LoginMutation.mutate(formData, {
+  //     onSuccess: (data) => {
+  //       console.log(data, "datadatadata")
+  //       storageService.setToken(data.token);
+ 
+  // window.dispatchEvent(new Event("CartProducts"));
+  //       toastService.success("Login Successfully!");
+ 
+  //       setIsOpen(false);
+  //                 login(response.token);
+  //     },
+
+  //     onError: (error) => {
+  //       setError(error.message);
+  //       toastService.error(error.message || "Login Failed!");
+  //     },
+  //   });
+  // };
+
+
+
   const handleLogin = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
+  setError("");
 
-    LoginMutation.mutate(formData, {
-      onSuccess: (data) => {
-        console.log(data, "datadatadata")
-        storageService.setToken(data.token);
-  window.dispatchEvent(new Event("auth-change"));
-        toastService.success("Login Successfully!");
-        setIsOpen(false);
-      },
+  LoginMutation.mutate(formData, {
+    onSuccess: (data) => {
+      console.log(data, "datadatadata");
 
-      onError: (error) => {
-        setError(error.message);
-        toastService.error(error.message || "Login Failed!");
-      },
-    });
-  };
+      // Save token
+      storageService.setToken(data.token);
 
+      // Update AuthContext immediately
+      login(data.token);
 
+      window.dispatchEvent(new Event("CartProducts"));
+
+      toastService.success("Login Successfully!");
+
+      setIsOpen(false);
+    },
+
+    onError: (error) => {
+      setError(error.message);
+      toastService.error(error.message || "Login Failed!");
+    },
+  });
+};
   const openModal = () => {
 
     setIsOpen(true);

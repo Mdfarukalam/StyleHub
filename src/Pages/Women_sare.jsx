@@ -50,7 +50,7 @@ const Women_sare = () => {
                     </p>
 
                     <h1 className="text-4xl font-bold mt-2">
-                        Latest Collection
+                       Women Latest Collection
                     </h1>
 
                     <p className="text-gray-500 mt-2">

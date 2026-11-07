@@ -7,11 +7,14 @@ import Login from "../Pages/Login_page";
 
 import {useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useGet from "../service/hooks/useGet";
+import API from "../ApiEndPoint/ApiUrl";
+import {useEffect } from "react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const [cartCount, setcartCount] = useState("");
+ 
+ 
   const [search, setSearch] = useState("");
 const navigate = useNavigate();
 
@@ -29,6 +32,46 @@ const handleSearch = (e) => {
     { name: "WOMEN", path: "/women" },
     { name: "KIDS", path: "/kids" },
   ];
+
+const [token, setToken] = useState(
+  localStorage.getItem("token")
+);
+
+useEffect(() => {
+  const handleCartUpdate = () => {
+    setToken(localStorage.getItem("token"));
+  };
+
+  window.addEventListener("CartProducts", handleCartUpdate);
+
+  return () => {
+    window.removeEventListener("CartProducts", handleCartUpdate);
+  };
+}, []);
+
+ 
+
+const { data } = useGet(
+  ["CartProducts"],
+  API.UserCartProducts,
+  {
+    enabled: !!token,
+  }
+);
+
+const cartItems = Array.isArray(data)
+  ? data
+  : data?.CartProdut ||
+    data?.CartProducts ||
+    data?.cartProducts ||
+    [];
+
+const cartCount = cartItems.reduce(
+  (total, item) => total + Number(item.quantity || 1),
+  0
+);
+
+
 
   const navClass = ({ isActive }) =>
     `relative py-2 text-[16px] font-medium transition duration-300
@@ -98,18 +141,20 @@ const handleSearch = (e) => {
           <User_Profile />
 
 
-<div
-  onClick={() => navigate("/cart")}
-  className="relative cursor-pointer"
->
-  <ShoppingCart size={25} />
+{token && (
+  <div
+    onClick={() => navigate("/cart")}
+    className="relative cursor-pointer"
+  >
+    <ShoppingCart size={25} />
 
-  {cartCount > 0 && (
-    <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-      {cartCount}
-    </span>
-  )}
-</div>
+    {cartCount > 0 && (
+      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+        {cartCount}
+      </span>
+    )}
+  </div>
+)}
 
           {/* Mobile Menu */}
           <button

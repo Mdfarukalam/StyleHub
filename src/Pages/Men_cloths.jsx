@@ -53,7 +53,7 @@ const Men_cloths = () => {
                     </p>
 
                     <h1 className="text-4xl font-bold mt-2">
-                        Latest Collection
+                       Men Latest Collection
                     </h1>
 
                     <p className="text-gray-500 mt-2">

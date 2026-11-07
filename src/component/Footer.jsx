@@ -1,3 +1,5 @@
+
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-slate-900 text-white mt-16">
@@ -24,11 +26,25 @@ const Footer = () => {
               SHOP
             </h3>
 
-            <ul className="space-y-2 text-gray-400">
-              <li>Men</li>
-              <li>Women</li>
-              <li>Kids</li>
-            </ul>
+        <ul className="space-y-2 text-gray-400">
+  <li>
+    <Link to="/men" className="hover:text-pink-500 transition">
+      Men
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/women" className="hover:text-pink-500 transition">
+      Women
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/kids" className="hover:text-pink-500 transition">
+      Kids
+    </Link>
+  </li>
+</ul>
           </div>
 
 
@@ -38,12 +54,31 @@ const Footer = () => {
               CUSTOMER SERVICE
             </h3>
 
-            <ul className="space-y-2 text-gray-400">
-              <li>Contact Us</li>
-              <li>Shipping</li>
-              <li>Returns</li>
-              <li>FAQs</li>
-            </ul>
+        <ul className="space-y-2 text-gray-400">
+  <li>
+    <Link to="/contact" className="hover:text-pink-500 transition">
+      Contact Us
+    </Link>
+  </li>
+
+  {/* <li>
+    <Link to="/shipping" className="hover:text-pink-500 transition">
+      Shipping
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/returns" className="hover:text-pink-500 transition">
+      Returns
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/faq" className="hover:text-pink-500 transition">
+      FAQs
+    </Link>
+  </li> */}
+</ul>
           </div>
 
 

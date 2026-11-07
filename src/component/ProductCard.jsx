@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import useMutationApi from "../service/hooks/useMutationApi";
 import API from "../ApiEndPoint/ApiUrl";
 import toastService from "./toastService";
+import { useAuth } from "../service/hooks/AuthContext";
 
  export const ProductCard = ({ product }) => {
   const variants = product?.colorVariants || [];
+ 
+  const { isLoggedIn } = useAuth();
 
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
@@ -29,14 +32,19 @@ import toastService from "./toastService";
 
 
  const handleAddToCart = () => {
+
+  if (!isLoggedIn) {
+    toastService.error("Please login first to add product to cart");
+    return;
+  }
   if (!selectedSize) {
     toastService.error("Please select a size");
     return;
   }
-
+ 
   addToCart(
     {
-      name: product.name,
+      name: selectedVariant.name,
       brand: product.brand,
       productId: product._id,
       productType: "men",
@@ -72,6 +80,10 @@ const { mutate: addWishlist, isPending: isWishlistPending } = useMutationApi(
 );
 
 const handleWishlist = () => {
+  if (!isLoggedIn) {
+    toastService.error("Please login first to add product to cart");
+    return;
+  }
   addWishlist(
     {
       productId: product._id,
@@ -127,7 +139,7 @@ const handleWishlist = () => {
       <div className="p-4">
 
         <h2 className="font-bold text-xl">
-          {product.name}
+          {selectedVariant.name}
         </h2>
 
         <p className="text-gray-500 mt-1">
