@@ -60,7 +60,8 @@ const ProfileDropdown = () => {
               👤 My Profile
             </button>
 
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
+            <button className="text-left px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100"
+              onClick={() => navigate("/MyOrders")}>
               📦 My Orders
             </button>
 

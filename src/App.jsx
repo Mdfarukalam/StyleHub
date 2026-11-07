@@ -12,6 +12,7 @@ import Cart from "./Pages/Cart";
 import Wishlist from "./Pages/Wishlist";
 import Contact from "./component/Contact";
 import Checkout from "./component/Checkout";
+import MyOrders from "./Pages/MyOrders";
 function App() {
 
         return (
@@ -30,6 +31,8 @@ function App() {
                                 <Route path="/Wishlist" element={<Wishlist />} />
                                  <Route path="/contact" element={<Contact />} />
                                  <Route path="/Checkout" element={<Checkout />} />
+                                                                  <Route path="/MyOrders" element={<MyOrders />} />
+
 
                         </Routes>
                         <GlobalLoader />

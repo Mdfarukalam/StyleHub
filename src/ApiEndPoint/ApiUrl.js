@@ -16,6 +16,8 @@ GetWishlist:"/api/auth/GetWishlist",
 ContactUsUser:"/api/auth/ContactUsUsersadd",
 addNewAddress:"/api/auth/addNewAddressnew",
 listContactUsUsers:"/api/auth/listContactUsUsersnew",
+CreateOrder:"/api/auth/CreateOrder",
+MyOrders:"/api/auth/MyOrders",
  
 
 

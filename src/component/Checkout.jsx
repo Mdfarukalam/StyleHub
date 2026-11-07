@@ -84,6 +84,12 @@ const Checkout = () => {
     ["UserAddresses"]
   );
 
+    const AddorderMutation = useMutationApi(
+    "POST",
+    API.CreateOrder,
+    ["CreateOrder"]
+  );
+
   // Handle Address Input
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -130,34 +136,65 @@ const Checkout = () => {
   };
 
   // Place Order
-  const handlePlaceOrder = () => {
-    if (!cartItems.length) {
-      toastService.error("Your cart is empty");
-      return;
-    }
+ 
+const handlePlaceOrder = () => {
+  if (!cartItems.length) {
+    toastService.error("Your cart is empty");
+    return;
+  }
 
-    const selectedAddressData = addresses.find(
-      (address) => address._id === selectedAddress
-    );
+  const selectedAddressData = addresses.find(
+    (address) => address._id === selectedAddress
+  );
 
-    if (!selectedAddressData) {
-      toastService.error("Please select delivery address");
-      return;
-    }
+  if (!selectedAddressData) {
+    toastService.error("Please select delivery address");
+    return;
+  }
 
-    const orderData = {
-      items: cartItems,
-      deliveryAddress: selectedAddressData,
-      subtotal,
-      shipping,
-      totalAmount,
-      paymentMethod: "COD",
-    };
+  // Prepare order items
+  const orderItems = cartItems.map((item) => ({
+    productId: item.productId,
+    name: item.name,
+    brand: item.brand,
 
-    console.log("Order Details:", orderData);
+    // Cart images -> Order image
+    image: Array.isArray(item.images)
+      ? item.images[0]
+      : item.images,
 
-    alert("Checkout design ready! Connect your Place Order API here.");
+    price: item.price,
+    quantity: item.quantity,
+    size: Array.isArray(item.sizes)
+      ? item.sizes[0]
+      : item.sizes,
+    color: item.color,
+  }));
+
+  const orderData = {
+    items: orderItems,
+    deliveryAddress: selectedAddressData,
+    subtotal,
+    shipping,
+    totalAmount,
+    paymentMethod: "COD",
   };
+
+  console.log("Order Details:", orderData);
+
+  AddorderMutation.mutate(orderData, {
+    onSuccess: (data) => {
+      toastService.success("Order placed successfully!");
+    },
+
+    onError: (error) => {
+      toastService.error(
+        error.message || "Order placement failed"
+      );
+    },
+  });
+};
+
 
   return (
     <>
@@ -541,7 +578,7 @@ const Checkout = () => {
                   className="w-full mt-6 bg-purple-700 hover:bg-purple-800 disabled:bg-gray-400 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition"
                 >
                   <Lock size={18} />
-                  Place Order
+                  Place Orders
                   <ArrowRight size={20} />
                 </button>
 
