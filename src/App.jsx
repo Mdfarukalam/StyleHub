@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Cart from "./Pages/Cart";
 import Wishlist from "./Pages/Wishlist";
 import Contact from "./component/Contact";
+import Checkout from "./component/Checkout";
 function App() {
 
         return (
@@ -28,6 +29,8 @@ function App() {
                                 <Route path="/cart" element={<Cart />} />
                                 <Route path="/Wishlist" element={<Wishlist />} />
                                  <Route path="/contact" element={<Contact />} />
+                                 <Route path="/Checkout" element={<Checkout />} />
+
                         </Routes>
                         <GlobalLoader />
                         <ToastContainer

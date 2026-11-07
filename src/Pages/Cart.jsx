@@ -14,7 +14,7 @@ import {
   Headset,
   RefreshCw,
 } from "lucide-react";
-
+import {useNavigate } from "react-router-dom";
 import Footer from "../component/Footer";
 import Navbar from "../component/navbar";
 import useGet from "../service/hooks/useGet";
@@ -28,7 +28,7 @@ import toastService from "../component/toastService";
 const Cart = () => {
 
 
-
+const navigate = useNavigate();
   
   const [cartItems, setCartItems] = useState([]);
 
@@ -352,14 +352,24 @@ const handleDelete = (id) => {
                 </div>
               </div>
 
-              <button
-                disabled={cartItems.length === 0}
-                className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-300 text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 transition"
-              >
-                <CreditCard size={23} />
-                Proceed to Checkout
-                <ArrowRight size={22} />
-              </button>
+          <button
+  disabled={cartItems.length === 0}
+  onClick={() =>
+    navigate("/checkout", {
+      state: {
+        cartItems: cartItems,
+        subtotal: subtotal,
+        shipping: shipping,
+        totalAmount: totalAmount,
+      },
+    })
+  }
+  className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-300 text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 transition"
+>
+  <CreditCard size={23} />
+  Proceed to Checkout
+  <ArrowRight size={22} />
+</button>
             </div>
           </div>
         </div>

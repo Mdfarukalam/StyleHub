@@ -41,7 +41,7 @@ const Contact = () => {
 
     
 
-        toastService.success("Signup Successfully!");
+        toastService.success("Message Send Successfully!");
  
 
         setFormData({
@@ -54,7 +54,7 @@ const Contact = () => {
 
       onError: (error) => {
         setError(error.message);
-        toastService.error(error.message || "Signup Failed!");
+        toastService.error(error.message || "essage Send Successfully!");
         setLoading(false);
       },
     });
@@ -64,7 +64,7 @@ const Contact = () => {
     <>
       <Navbar />
       <div className="pt-24"></div>
-      <div className="bg-gray-50 min-h-screen py-14 px-4">
+      <div className="bg-gray-50   py-14 px-4">
         <div className="max-w-6xl mx-auto">
 
           <div className="text-center mb-12">

@@ -13,7 +13,9 @@ DeleteCartProduct:"/api/auth/DeleteCartProducts",
 AddWishlist:"/api/auth/AddWishlist",
 RemoveWishlist:"/api/auth/RemoveWishlist",
 GetWishlist:"/api/auth/GetWishlist",
-ContactUsUser:"/api/auth/ContactUsUsers",
+ContactUsUser:"/api/auth/ContactUsUsersadd",
+addNewAddress:"/api/auth/addNewAddressnew",
+listContactUsUsers:"/api/auth/listContactUsUsersnew",
  
 
 
