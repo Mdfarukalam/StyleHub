@@ -11,13 +11,17 @@ addcart: "/api/auth/AddCarts",
 UserCartProducts:"/api/auth/UserCartProducts",
 DeleteCartProduct:"/api/auth/DeleteCartProducts",
 AddWishlist:"/api/auth/AddWishlist",
-RemoveWishlist:"/api/auth/RemoveWishlist",
+RemoveWishlist:"/api/auth/RemoveWishlists",
 GetWishlist:"/api/auth/GetWishlist",
 ContactUsUser:"/api/auth/ContactUsUsersadd",
 addNewAddress:"/api/auth/addNewAddressnew",
 listContactUsUsers:"/api/auth/listContactUsUsersnew",
 CreateOrder:"/api/auth/CreateOrder",
 MyOrders:"/api/auth/MyOrders",
+DeleteNewAddressnew:"/api/auth/DeleteNewAddressnew",
+EditNewAddressnew:"/api/auth/EditNewAddressnew",
+SingleOrder:"/api/auth/SingleOrder",
+cancelOrders:"/api/auth/cancelOrders",
  
 
 

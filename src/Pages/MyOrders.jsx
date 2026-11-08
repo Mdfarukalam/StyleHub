@@ -18,10 +18,23 @@ import Footer from "../component/Footer";
 import useGet from "../service/hooks/useGet";
 import API from "../ApiEndPoint/ApiUrl";
 
+
+ 
+import useMutationApi from "../service/hooks/useMutationApi";
+ 
+import toastService from "../component/toastService";
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
 
+
+
+
+  const CancelOrderMutation = useMutationApi(
+  "DELETE",
+  API.cancelOrders,
+  ["MyOrders"]
+);
   // GET MY ORDERS API
   const {
     data: orderDataResponse,
@@ -141,6 +154,34 @@ const MyOrders = () => {
   ];
 
  
+
+ 
+
+      
+    // DELETE Address
+  const handleCancelOrder = (order) => {
+ 
+console.log(order,"orderorderorderorder")
+    CancelOrderMutation.mutate(
+      { orderId: order},
+      {
+        onSuccess: () => {
+        toastService.success("Order cancelled successfully!");
+
+      
+
+    
+        },
+        onError: (error) => {
+          toastService.error(
+          error.message || "Order cancellation failed"
+          );
+        },
+      }
+    );
+  };
+ 
+
   return (
 
 
@@ -435,8 +476,14 @@ const MyOrders = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2">
-
-                    
+{order.orderStatus === "Pending" && (
+  <button
+    onClick={() => handleCancelOrder(order._id)}
+    className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold"
+  >
+    Cancel Order
+  </button>
+)}
 
                       <Link
                         to={`/OrderDetails/${order._id}`}

@@ -94,8 +94,9 @@ const handleWishlist = () => {
         toastService.success("Added to wishlist successfully");
       },
       onError: (error) => {
+ 
         toastService.error(
-          error?.response?.data?.message || "Failed to add wishlist"
+          error?.response?.message || "Product already in wishlist"
         );
       },
     }
