@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useState}from "react";
 import { useNavigate } from "react-router-dom";
 import useGet from "../service/hooks/useGet";
 import API from "../ApiEndPoint/ApiUrl";
 import storageService from "../service/storageService";
-
+import LogoutModal from "../component/LogoutModal";
 const User_Profile = () => {
   const token = storageService.getToken();
   console.log(token,"tokentokentoken")
@@ -16,7 +16,7 @@ const User_Profile = () => {
 
 const ProfileDropdown = () => {
   const navigate = useNavigate();
-
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const { data, isLoading } = useGet(
     ["Profile"],
     API.Profile
@@ -27,11 +27,13 @@ const ProfileDropdown = () => {
   const handleLogout = () => {
     storageService.removeToken();
     storageService.removeUser();
+      setIsLogoutOpen(false);
     navigate("/");
     window.location.reload();
   };
 
   return (
+    <> 
     <div className="relative group">
       <button className="flex items-center gap-2 text-gray-800 hover:text-pink-500">
         <span className="text-2xl">👤</span>
@@ -56,10 +58,11 @@ const ProfileDropdown = () => {
           </div>
 
           <div className="flex flex-col mt-3">
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
+            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100"
+                 cursor-pointer  onClick={() => navigate("/Profile")}>
               👤 My Profile
             </button>
-
+ 
             <button className="text-left px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100"
               onClick={() => navigate("/MyOrders")}>
               📦 My Orders
@@ -72,7 +75,7 @@ const ProfileDropdown = () => {
             </button>
 
             <button
-              onClick={handleLogout}
+             onClick={() => setIsLogoutOpen(true)}
               className="text-left px-3 py-2 rounded-lg text-red-500 hover:bg-red-50"
             >
               🚪 Logout
@@ -82,7 +85,17 @@ const ProfileDropdown = () => {
         </div>
       </div>
     </div>
+  {/* Logout Modal */}
+<LogoutModal
+  isOpen={isLogoutOpen}
+  setIsOpen={setIsLogoutOpen}
+  handleLogout={handleLogout}
+/>
+</>
   );
+
+
+ 
 };
 
 export default User_Profile;

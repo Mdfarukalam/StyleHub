@@ -1,30 +1,30 @@
 
 import { Link, NavLink } from "react-router-dom";
- 
-import Login from "../Pages/Login_page";
- import { ShoppingCart, User, Heart, Search } from "lucide-react";
- import User_Profile from "../Pages/User_Profile";
 
-import {useNavigate } from "react-router-dom";
+import Login from "../Pages/Login_page";
+import { ShoppingCart, User, Heart, Search } from "lucide-react";
+import User_Profile from "../Pages/User_Profile";
+
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useGet from "../service/hooks/useGet";
 import API from "../ApiEndPoint/ApiUrl";
-import {useEffect } from "react";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
- 
- 
+
+
   const [search, setSearch] = useState("");
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleSearch = (e) => {
-  e.preventDefault();
+  const handleSearch = (e) => {
+    e.preventDefault();
 
-  if (!search.trim()) return;
+    if (!search.trim()) return;
 
-  navigate(`/men?search=${encodeURIComponent(search.trim())}`);
-};
+    navigate(`/men?search=${encodeURIComponent(search.trim())}`);
+  };
 
   const navItems = [
     { name: "HOME", path: "/Home" },
@@ -33,43 +33,43 @@ const handleSearch = (e) => {
     { name: "KIDS", path: "/kids" },
   ];
 
-const [token, setToken] = useState(
-  localStorage.getItem("token")
-);
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+  );
 
-useEffect(() => {
-  const handleCartUpdate = () => {
-    setToken(localStorage.getItem("token"));
-  };
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      setToken(localStorage.getItem("token"));
+    };
 
-  window.addEventListener("CartProducts", handleCartUpdate);
+    window.addEventListener("CartProducts", handleCartUpdate);
 
-  return () => {
-    window.removeEventListener("CartProducts", handleCartUpdate);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("CartProducts", handleCartUpdate);
+    };
+  }, []);
 
- 
 
-const { data } = useGet(
-  ["CartProducts"],
-  API.UserCartProducts,
-  {
-    enabled: !!token,
-  }
-);
 
-const cartItems = Array.isArray(data)
-  ? data
-  : data?.CartProdut ||
+  const { data } = useGet(
+    ["CartProducts"],
+    API.UserCartProducts,
+    {
+      enabled: !!token,
+    }
+  );
+
+  const cartItems = Array.isArray(data)
+    ? data
+    : data?.CartProdut ||
     data?.CartProducts ||
     data?.cartProducts ||
     [];
 
-const cartCount = cartItems.reduce(
-  (total, item) => total + Number(item.quantity || 1),
-  0
-);
+  const cartCount = cartItems.reduce(
+    (total, item) => total + Number(item.quantity || 1),
+    0
+  );
 
 
 
@@ -111,50 +111,50 @@ const cartCount = cartItems.reduce(
 
           {/* Search */}
           {/* Search */}
-<form
-  onSubmit={handleSearch}
-  className="hidden md:flex items-center w-[300px] h-[45px] border border-gray-300 rounded-lg px-4"
->
-  <input
-    type="text"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    placeholder="Search products..."
-    className="flex-1 outline-none text-gray-700"
-  />
+          <form
+            onSubmit={handleSearch}
+            className="hidden md:flex items-center w-[300px] h-[45px] border border-gray-300 rounded-lg px-4"
+          >
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search products..."
+              className="flex-1 outline-none text-gray-700"
+            />
 
-  <button type="submit" className="text-xl">
-    🔍
-  </button>
-</form>
-          
+            <button type="submit" className="text-xl">
+              🔍
+            </button>
+          </form>
+
 
           {/* Login */}
           <div className="hidden sm:block">
             <Login />
           </div>
 
- 
-   
+
+
 
           {/* Profile */}
           <User_Profile />
 
 
-{token && (
-  <div
-    onClick={() => navigate("/cart")}
-    className="relative cursor-pointer"
-  >
-    <ShoppingCart size={25} />
+          {token && (
+            <div
+              onClick={() => navigate("/cart")}
+              className="relative cursor-pointer"
+            >
+              <ShoppingCart size={25} />
 
-    {cartCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-        {cartCount}
-      </span>
-    )}
-  </div>
-)}
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Mobile Menu */}
           <button
@@ -187,7 +187,7 @@ const cartCount = cartItems.reduce(
               <div className="mb-3">
                 <Login />
               </div>
-   
+
             </div>
           </div>
         </div>

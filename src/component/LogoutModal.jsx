@@ -1,97 +1,60 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useGet from "../service/hooks/useGet";
-import API from "../ApiEndPoint/ApiUrl";
-import storageService from "../service/storageService";
-import LogoutModal from "../component/LogoutModal";
+import React from "react";
+import Modal from "react-modal";
+import { LogOut } from "lucide-react";
 
-const User_Profile = () => {
-  const token = storageService.getToken();
-
-  if (!token) return null;
-
-  return <ProfileDropdown />;
-};
-
-const ProfileDropdown = () => {
-  const navigate = useNavigate();
-  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-
-  const { data, isLoading } = useGet(
-    ["Profile"],
-    API.Profile
-  );
-
-  const user = data?.UserData || data;
-
-  const handleLogout = () => {
-    storageService.removeToken();
-    storageService.removeUser();
-    setIsLogoutOpen(false);
-    navigate("/");
-    window.location.reload();
-  };
-
+function LogoutModal({
+  isOpen,
+  setIsOpen,
+  handleLogout,
+}) {
   return (
-    <>
-      <div className="relative group">
-        <button className="flex items-center gap-2 text-gray-800 hover:text-pink-500">
-          <span className="text-2xl">👤</span>
-        </button>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={() => setIsOpen(false)}
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
+      className="bg-[#181b21] w-[calc(100%-32px)] max-w-[400px] border border-[#2a2e36] rounded-xl p-6 outline-none"
+      overlayClassName="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4"
+    >
 
-        <div className="hidden group-hover:block absolute right-0 top-full pt-2 w-[240px] z-50">
-          <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-4">
-
-            <div className="flex items-center gap-3 border-b border-gray-200 pb-4">
-              <div className="w-[45px] h-[45px] rounded-full bg-pink-100 flex items-center justify-center">
-                👤
-              </div>
-
-              <div className="min-w-0">
-                <h3 className="font-semibold truncate">
-                  {isLoading ? "Loading..." : user?.fullName || "User"}
-                </h3>
-
-                <p className="text-sm text-gray-500 truncate">
-                  {user?.Email || ""}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col mt-3">
-              <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-                👤 My Profile
-              </button>
-
-              <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-                📦 My Orders
-              </button>
-
-              <button
-                onClick={() => navigate("/Wishlist")}
-                className="text-left px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100"
-              >
-                ❤️ Wishlist
-              </button>
-
-              <button
-                onClick={() => setIsLogoutOpen(true)}
-                className="text-left px-3 py-2 rounded-lg text-red-500 hover:bg-red-50"
-              >
-                🚪 Logout
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Logout Icon */}
+      <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+        <LogOut size={22} className="text-red-400" />
       </div>
 
-      <LogoutModal
-        isOpen={isLogoutOpen}
-        setIsOpen={setIsLogoutOpen}
-        handleLogout={handleLogout}
-      />
-    </>
-  );
-};
+      {/* Modal Title */}
+      <h2 className="text-lg font-semibold text-white">
+        Confirm Logout
+      </h2>
 
-export default User_Profile;
+      {/* Modal Description */}
+      <p className="text-sm text-gray-400 mt-2 leading-6">
+        Are you sure you want to logout from your account?
+      </p>
+
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-3 mt-6">
+
+        {/* Cancel Button */}
+        <button
+          onClick={() => setIsOpen(false)}
+          className="px-4 py-2 rounded-lg bg-[#292e37] text-sm text-gray-300 hover:bg-[#333842]"
+        >
+          Cancel
+        </button>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="px-5 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-sm font-medium text-white"
+        >
+          Yes, Logout
+        </button>
+
+      </div>
+
+    </Modal>
+  );
+}
+
+export default LogoutModal;
