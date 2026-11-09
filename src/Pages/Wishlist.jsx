@@ -55,7 +55,7 @@ const Wishlist = () => {
   } = useMutationApi(
     "POST",
     API.addcart,
-    ["cart"]
+    ["CartProducts"]
   );
 
   // REMOVE WISHLIST
@@ -138,6 +138,7 @@ const Wishlist = () => {
           toastService.success(
             "Product added to cart successfully"
           );
+                window.dispatchEvent(new Event("CartProducts"));
         },
 
         onError: (error) => {

@@ -51,7 +51,7 @@ function Signup() {
         }
 
         toastService.success("Signup Successfully!");
-  window.dispatchEvent(new Event("auth-change"));
+      window.dispatchEvent(new Event("CartProducts"));
         setIsOpen(false);
         setLoading(false);
 

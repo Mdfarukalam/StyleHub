@@ -107,7 +107,7 @@ const navigate = useNavigate();
 const { mutate: deleteProduct, isPending: isDeleting } = useMutationApi(
   "DELETE",
   API.DeleteCartProduct,
-  ["CartProductsd"]
+  ["CartProducts"]
 );
 
 const handleDelete = (id) => {

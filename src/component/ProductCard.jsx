@@ -26,7 +26,7 @@ import { useAuth } from "../service/hooks/AuthContext";
   const { mutate: addToCart, isPending } = useMutationApi(
   "POST",
   API.addcart,
-  ["cart"]
+  ["CartProducts"]
 );
 
 
@@ -60,6 +60,7 @@ import { useAuth } from "../service/hooks/AuthContext";
       onSuccess: (response) => {
         console.log("API SUCCESS:", response);
         toastService.success("Product added to cart successfully");
+              window.dispatchEvent(new Event("CartProducts"));
       },
       onError: (error) => {
         console.log("API ERROR:", error);
@@ -92,6 +93,7 @@ const handleWishlist = () => {
     {
       onSuccess: () => {
         toastService.success("Added to wishlist successfully");
+              window.dispatchEvent(new Event("CartProducts"));
       },
       onError: (error) => {
  
