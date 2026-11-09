@@ -111,7 +111,7 @@ const Navbar = () => {
 
           {/* Search */}
           {/* Search */}
-          <form
+          {/* <form
             onSubmit={handleSearch}
             className="hidden md:flex items-center w-[300px] h-[45px] border border-gray-300 rounded-lg px-4"
           >
@@ -126,7 +126,7 @@ const Navbar = () => {
             <button type="submit" className="text-xl">
               🔍
             </button>
-          </form>
+          </form> */}
 
 
           {/* Login */}

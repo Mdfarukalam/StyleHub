@@ -22,6 +22,7 @@ DeleteNewAddressnew:"/api/auth/DeleteNewAddressnew",
 EditNewAddressnew:"/api/auth/EditNewAddressnew",
 SingleOrder:"/api/auth/SingleOrder",
 cancelOrders:"/api/auth/cancelOrders",
+UserSideLatestImages:"/api/auth/UserSideLatestImages",
  
 
 
