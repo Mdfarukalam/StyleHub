@@ -82,6 +82,7 @@ Discover the best styles, handpicked for you.
                             <ProductCard
                                 key={product._id}
                                 product={product}
+                                 productType="kid"
                             />
                         ))}
 

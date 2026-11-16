@@ -81,6 +81,7 @@ const Women_sare = () => {
                             <ProductCard
                                 key={product._id}
                                 product={product}
+                                  productType="Women"
                             />
                         ))}
 

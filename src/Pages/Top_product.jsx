@@ -80,6 +80,7 @@ const Top_product = () => {
                             <ProductCard
                                 key={product._id}
                                 product={product}
+                                productType="Top_product"
                             />
                         ))}
 

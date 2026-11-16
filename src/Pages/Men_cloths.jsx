@@ -28,7 +28,7 @@ const Men_cloths = () => {
         if (data) {
             const userData = Array.isArray(data)
                 ? data
-                : data.UserGetMenProduts || [];
+                : data.UserGetMenProducts || [];
 
             setMenProducts(
                 Array.isArray(userData) ? userData : []
@@ -84,6 +84,7 @@ const Men_cloths = () => {
                             <ProductCard
                                 key={product._id}
                                 product={product}
+                                    productType="men"
                             />
                         ))}
 

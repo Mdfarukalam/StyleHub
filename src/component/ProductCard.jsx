@@ -5,17 +5,19 @@ import useMutationApi from "../service/hooks/useMutationApi";
 import API from "../ApiEndPoint/ApiUrl";
 import toastService from "./toastService";
 import { useAuth } from "../service/hooks/AuthContext";
+import { Heart } from "lucide-react";
 
- export const ProductCard = ({ product }) => {
+ export const ProductCard = ({ product,productType }) => {
   const variants = product?.colorVariants || [];
- 
+ console.log(productType,"productType")
   const { isLoggedIn } = useAuth();
 
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
 
   const selectedVariant = variants[selectedVariantIndex];
-
+  const isWishlisted = selectedVariant?.isWishlisted || false;
+console.log(isWishlisted,"isWishlistedisWishlistedisWishlisted")
   const handleColorChange = (index) => {
     setSelectedVariantIndex(index);
     setSelectedSize("");
@@ -46,8 +48,8 @@ import { useAuth } from "../service/hooks/AuthContext";
     {
       name: selectedVariant.name,
       brand: product.brand,
-      productId: product._id,
-      productType: "men",
+      productId: selectedVariant._id,
+      productType: productType,
       color: selectedVariant.color,
       discount: selectedVariant.discount,
       images: selectedVariant.images,
@@ -80,15 +82,17 @@ const { mutate: addWishlist, isPending: isWishlistPending } = useMutationApi(
   ["wishlist"]
 );
 
-const handleWishlist = () => {
+const handleWishlist = (id) => {
+  console.log(id, "Product ID");
+
   if (!isLoggedIn) {
     toastService.error("Please login first to add product to cart");
     return;
   }
   addWishlist(
     {
-      productId: product._id,
-      productType: "men",
+      productId:id,
+      productType: productType,
     },
     {
       onSuccess: () => {
@@ -131,9 +135,24 @@ const handleWishlist = () => {
             -{selectedVariant?.discount || 0}%
           </span>
 
-          <span onClick={handleWishlist} className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl cursor-pointer">
+          {/* <span        disabled={isWishlistPending}  onClick={() => handleWishlist(selectedVariant?._id)} className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xl cursor-pointer">
             ♡
-          </span  >
+          </span  > */}
+           <button
+            type="button"
+            disabled={isWishlistPending}
+            onClick={() => handleWishlist(selectedVariant?._id)}
+            className="bg-white rounded-full w-10 h-10 flex items-center justify-center cursor-pointer disabled:opacity-50"
+          >
+            <Heart
+              size={23}
+              className={
+                isWishlisted
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-600"
+              }
+            />
+          </button>
 
         </div>
       </div>
