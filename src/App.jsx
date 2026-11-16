@@ -15,6 +15,7 @@ import Contact from "./component/Contact";
 import Checkout from "./component/Checkout";
 import MyOrders from "./Pages/MyOrders";
 import User_Profile from "./component/UserProfile";
+import OrderTracking from "./Pages/OrderTracking";
 function App() {
   return (
     <AuthProvider>
@@ -31,6 +32,9 @@ function App() {
           <Route path="/Checkout" element={<Checkout />} />
           <Route path="/MyOrders" element={<MyOrders />} />
     <Route path="/Profile" element={<User_Profile />} />
+        <Route   path="/OrderTracking/:id" element={<OrderTracking />} />
+
+     
         </Routes>
         <NetworkStatusModal />
         <GlobalLoader />

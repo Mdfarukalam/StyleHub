@@ -282,7 +282,7 @@ const navigate = useNavigate();
     AddorderMutation.mutate(orderData, {
       onSuccess: () => {
         toastService.success("Order placed successfully!");
-           navigate(`/OrderConfirmation/${orderId}`);
+      navigate("/MyOrders");
       },
       onError: (error) => {
         toastService.error(

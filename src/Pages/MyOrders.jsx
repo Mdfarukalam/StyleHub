@@ -167,7 +167,7 @@ console.log(order,"orderorderorderorder")
       {
         onSuccess: () => {
         toastService.success("Order cancelled successfully!");
-
+  
       
 
     
@@ -486,12 +486,15 @@ console.log(order,"orderorderorderorder")
 )}
 
                       <Link
-                        to={`/OrderDetails/${order._id}`}
+                        to={`/OrderTracking/${order._id}`}
                         className="px-5 py-2.5 bg-pink-500 hover:bg-pink-600 text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition"
                       >
                         <Truck size={16} />
                         Track Order
                       </Link>
+
+
+                      
 
                     </div>
 
